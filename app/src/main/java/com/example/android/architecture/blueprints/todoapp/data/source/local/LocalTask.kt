@@ -20,7 +20,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
- * ローカルに保存されるデータオブジェクト
+ * ローカルに保存されるデータモデル
  */
 @Entity(tableName = "task")
 data class LocalTask(

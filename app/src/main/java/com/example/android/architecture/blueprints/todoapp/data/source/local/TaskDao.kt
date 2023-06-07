@@ -21,6 +21,9 @@ import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * データにアクセス(モデルを作成、読み取り、更新、削除)するためのデータソース
+ */
 @Dao
 interface TaskDao {
     @Query("SELECT * FROM task")
