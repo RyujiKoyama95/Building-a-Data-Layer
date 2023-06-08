@@ -16,6 +16,7 @@
 
 package com.example.android.architecture.blueprints.todoapp.data.source.local
 
+import android.util.Log
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import kotlinx.coroutines.flow.first
@@ -26,6 +27,10 @@ import org.junit.Before
 import org.junit.Test
 
 class TaskDaoTest {
+    companion object {
+        const val TAG = "TaskDaoTest"
+    }
+
     private lateinit var database: ToDoDatabase
 
     // setUpDb()でインメモリデータベースを作成
@@ -42,9 +47,12 @@ class TaskDaoTest {
      * ダミーのLocalTaskオブジェクトを用意
      * TaskDaoのAPIを呼び出す insert → get
      * getしたデータが用意したLocalTaskオブジェクトと一致しているかをassert
+     * TaskDaoのAPIを呼び出す delete → get
+     * getしたデータのサイズが0になっているかをassert
      */
     @Test
-    fun insertTaskAndGetTask() {
+    fun test_insertTask_getTask_deleteTask() {
+        Log.d(TAG, "test_insertTask_getTask_deleteTask start")
         runTest {
             val expected = LocalTask(
                 "999",
@@ -57,9 +65,14 @@ class TaskDaoTest {
             // insert task
             taskDao.upsert(expected)
             // get task
-            val tasks = taskDao.observeAll().first()
-
+            var tasks = taskDao.observeAll().first()
             Assert.assertEquals(expected, tasks[0])
+
+            // delete task
+            taskDao.deleteAll()
+            tasks = taskDao.observeAll().first()
+            Assert.assertEquals(0, tasks.size)
+            Log.d(TAG, "test_insertTask_getTask_deleteTask end")
         }
     }
 }
