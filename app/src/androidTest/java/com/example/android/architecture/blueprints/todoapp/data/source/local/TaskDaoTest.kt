@@ -20,7 +20,6 @@ import android.util.Log
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
