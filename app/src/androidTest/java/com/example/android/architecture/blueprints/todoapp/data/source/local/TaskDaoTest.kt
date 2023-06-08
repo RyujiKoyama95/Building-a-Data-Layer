@@ -15,3 +15,51 @@
  */
 
 package com.example.android.architecture.blueprints.todoapp.data.source.local
+
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
+
+class TaskDaoTest {
+    private lateinit var database: ToDoDatabase
+
+    // setUpDb()でインメモリデータベースを作成
+    // ディスクベースのデータベースよりも高速。テストより長くデータを保持する必要のない自動テストに向いている
+    @Before
+    fun setUpDb() {
+        database = Room.inMemoryDatabaseBuilder(
+            getApplicationContext(),
+            ToDoDatabase::class.java
+        ).allowMainThreadQueries().build()
+    }
+
+    /**
+     * ダミーのLocalTaskオブジェクトを用意
+     * TaskDaoのAPIを呼び出す insert → get
+     * getしたデータが用意したLocalTaskオブジェクトと一致しているかをassert
+     */
+    @Test
+    fun insertTaskAndGetTask() {
+        runTest {
+            val expected = LocalTask(
+                "999",
+                "dummyTask",
+                "This is dummy task",
+                false
+            )
+
+            val taskDao = database.taskDao()
+            // insert task
+            taskDao.upsert(expected)
+            // get task
+            val tasks = taskDao.observeAll().first()
+
+            Assert.assertEquals(expected, tasks[0])
+        }
+    }
+}
