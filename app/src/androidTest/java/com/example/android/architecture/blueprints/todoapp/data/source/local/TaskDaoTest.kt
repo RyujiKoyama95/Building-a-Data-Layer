@@ -65,6 +65,7 @@ class TaskDaoTest {
             taskDao.upsert(expected)
             // get task
             var tasks = taskDao.observeAll().first()
+            Assert.assertEquals(1, tasks.size)
             Assert.assertEquals(expected, tasks[0])
 
             // delete task
