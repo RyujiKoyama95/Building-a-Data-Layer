@@ -15,3 +15,14 @@
  */
 
 package com.example.android.architecture.blueprints.todoapp.data
+
+import com.example.android.architecture.blueprints.todoapp.data.source.local.TaskDao
+import com.example.android.architecture.blueprints.todoapp.data.source.network.TaskNetworkDataSource
+import javax.inject.Inject
+
+class DefaultTaskRepository @Inject constructor(
+    private val taskDao: TaskDao,
+    private val taskNetworkDataSource: TaskNetworkDataSource
+) {
+
+}
