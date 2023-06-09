@@ -18,6 +18,7 @@ package com.example.android.architecture.blueprints.todoapp.data.source.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.android.architecture.blueprints.todoapp.data.Task
 
 /**
  * ローカルに保存されるデータモデル
@@ -29,3 +30,13 @@ data class LocalTask(
     val description: String,
     val isCompleted: Boolean
 )
+
+fun LocalTask.toExternal(): Task {
+    return Task(
+        id = id,
+        title = title,
+        description = description,
+        isCompleted = isCompleted
+    )
+}
+fun List<LocalTask>.toExternal() = map(LocalTask::toExternal)
