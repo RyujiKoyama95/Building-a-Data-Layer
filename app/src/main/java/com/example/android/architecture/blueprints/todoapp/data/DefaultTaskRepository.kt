@@ -27,6 +27,12 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 import javax.inject.Inject
 
+/**
+ * リポジトリはデータを得るためのデータソースは(複数あっても)1つにする
+ * TaskDao.observeAll()ではLocalTaskが取得できるが、
+ * LocalTaskモデルは他のアーキテクチャに公開する必要はないため、
+ * 取得するLocalTaskはTaskに変換する。
+ */
 class DefaultTaskRepository @Inject constructor(
     private val localDataSource: TaskDao,
     private val networkDataSource: TaskNetworkDataSource,
