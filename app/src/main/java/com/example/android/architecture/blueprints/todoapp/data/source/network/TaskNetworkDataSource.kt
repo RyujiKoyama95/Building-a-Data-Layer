@@ -15,3 +15,38 @@
  */
 
 package com.example.android.architecture.blueprints.todoapp.data.source.network
+
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import javax.inject.Inject
+
+class TaskNetworkDataSource @Inject constructor() {
+    private val accessMutex = Mutex()
+    private var networkTasks = listOf<NetworkTask>(
+        NetworkTask(
+            "1",
+            "task1",
+            "aaa",
+            1
+        ),
+        NetworkTask(
+            "2",
+            "task2",
+            "bbb",
+            2
+        )
+    )
+
+    // Mutex().withLock{}で排他制御
+    // withLock{}のブロック内の処理は１つのスレッドでのみ動く、競合が発生している場合は、待つようになる
+    suspend fun loadTasks(): List<NetworkTask> = accessMutex.withLock {
+        delay(2000L)
+        return networkTasks
+    }
+
+    suspend fun saveTasks(newTasks: List<NetworkTask>) = accessMutex.withLock {
+        delay(2000L)
+        networkTasks = newTasks
+    }
+}
