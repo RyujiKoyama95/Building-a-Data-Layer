@@ -19,17 +19,31 @@ package com.example.android.architecture.blueprints.todoapp.data
 import com.example.android.architecture.blueprints.todoapp.data.source.local.TaskDao
 import com.example.android.architecture.blueprints.todoapp.data.source.local.toExternal
 import com.example.android.architecture.blueprints.todoapp.data.source.network.TaskNetworkDataSource
+import com.example.android.architecture.blueprints.todoapp.di.DefaultDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
+import java.util.UUID
 import javax.inject.Inject
 
 class DefaultTaskRepository @Inject constructor(
     private val localDataSource: TaskDao,
-    private val networkDataSource: TaskNetworkDataSource
+    private val networkDataSource: TaskNetworkDataSource,
+    @DefaultDispatcher private val dispatcher: CoroutineDispatcher
 ) {
-    fun observeAll(): Flow<List<Task>> {
+    suspend fun observeAll(): Flow<List<Task>> {
         return localDataSource.observeAll().map { tasks ->
             tasks.toExternal()
         }
+    }
+    suspend fun create(title: String, description: String): String {
+        val taskId = withContext(dispatcher) {
+            createTaskId()
+        }
+    }
+
+    private fun createTaskId(): String {
+        return UUID.randomUUID().toString()
     }
 }
