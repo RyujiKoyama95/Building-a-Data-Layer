@@ -17,12 +17,19 @@
 package com.example.android.architecture.blueprints.todoapp.data
 
 import com.example.android.architecture.blueprints.todoapp.data.source.local.TaskDao
+import com.example.android.architecture.blueprints.todoapp.data.source.local.toExternal
 import com.example.android.architecture.blueprints.todoapp.data.source.network.TaskNetworkDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class DefaultTaskRepository @Inject constructor(
-    private val taskDao: TaskDao,
-    private val taskNetworkDataSource: TaskNetworkDataSource
+    private val localDataSource: TaskDao,
+    private val networkDataSource: TaskNetworkDataSource
 ) {
-
+    fun observeAll(): Flow<List<Task>> {
+        return localDataSource.observeAll().map { tasks ->
+            tasks.toExternal()
+        }
+    }
 }
