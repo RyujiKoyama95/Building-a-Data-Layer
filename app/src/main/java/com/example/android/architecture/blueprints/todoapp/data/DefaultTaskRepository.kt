@@ -28,6 +28,8 @@ import java.util.UUID
 import javax.inject.Inject
 
 /**
+ * Task Repository
+ *
  * リポジトリはデータを得るためのデータソースは(複数あっても)1つにする
  * TaskDao.observeAll()ではLocalTaskが取得できるが、
  * LocalTaskモデルは他のアーキテクチャに公開する必要はないため、
