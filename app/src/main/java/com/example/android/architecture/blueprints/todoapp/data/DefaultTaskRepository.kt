@@ -46,6 +46,8 @@ class DefaultTaskRepository @Inject constructor(
             tasks.toExternal()
         }
     }
+
+    // TaskDao.upsert()を使うため、Task→LocalTaskへ変換
     suspend fun create(title: String, description: String): String {
         val taskId = withContext(dispatcher) {
             createTaskId()
