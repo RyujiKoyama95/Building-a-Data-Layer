@@ -41,6 +41,9 @@ class DefaultTaskRepository @Inject constructor(
     // Todo: dispatcherとInjectがまだよくわからんので確認
     @DefaultDispatcher private val dispatcher: CoroutineDispatcher
 ) {
+    companion object {
+        const val COMPLETE = true
+    }
     suspend fun observeAll(): Flow<List<Task>> {
         return localDataSource.observeAll().map { tasks ->
             tasks.toExternal()
@@ -59,6 +62,10 @@ class DefaultTaskRepository @Inject constructor(
         )
         localDataSource.upsert(task.toLocal())
         return taskId
+    }
+
+    suspend fun complete(taskId: String) {
+        localDataSource.updateCompleted(taskId, COMPLETE)
     }
 
     private fun createTaskId(): String {
