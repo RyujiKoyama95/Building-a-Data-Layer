@@ -16,6 +16,8 @@
 
 package com.example.android.architecture.blueprints.todoapp.data
 
+import com.example.android.architecture.blueprints.todoapp.data.source.local.LocalTask
+
 /**
  * Immutable model class for a Task.
  *
@@ -43,3 +45,10 @@ data class Task(
     val isEmpty
         get() = title.isEmpty() || description.isEmpty()
 }
+
+fun Task.toLocal() = LocalTask(
+    id,
+    title,
+    description,
+    isCompleted
+)
