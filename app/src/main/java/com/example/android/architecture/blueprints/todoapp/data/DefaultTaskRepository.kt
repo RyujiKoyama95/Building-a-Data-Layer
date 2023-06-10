@@ -50,6 +50,13 @@ class DefaultTaskRepository @Inject constructor(
         val taskId = withContext(dispatcher) {
             createTaskId()
         }
+        val task = Task(
+            title = title,
+            description = description,
+            id = taskId
+        )
+        localDataSource.upsert(task.toLocal())
+        return taskId
     }
 
     private fun createTaskId(): String {
