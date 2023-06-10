@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.room.Room
 import com.example.android.architecture.blueprints.todoapp.data.source.local.TaskDao
 import com.example.android.architecture.blueprints.todoapp.data.source.local.ToDoDatabase
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
