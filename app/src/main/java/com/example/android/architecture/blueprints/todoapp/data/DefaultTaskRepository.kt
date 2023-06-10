@@ -42,7 +42,7 @@ class DefaultTaskRepository @Inject constructor(
     @DefaultDispatcher private val dispatcher: CoroutineDispatcher
 ) {
     companion object {
-        const val COMPLETE = true
+        const val COMPLETED = true
     }
     suspend fun observeAll(): Flow<List<Task>> {
         return localDataSource.observeAll().map { tasks ->
@@ -65,7 +65,7 @@ class DefaultTaskRepository @Inject constructor(
     }
 
     suspend fun complete(taskId: String) {
-        localDataSource.updateCompleted(taskId, COMPLETE)
+        localDataSource.updateCompleted(taskId, COMPLETED)
     }
 
     private fun createTaskId(): String {
