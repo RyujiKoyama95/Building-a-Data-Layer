@@ -19,6 +19,7 @@ package com.example.android.architecture.blueprints.todoapp.data.source.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.android.architecture.blueprints.todoapp.data.Task
+import com.example.android.architecture.blueprints.todoapp.data.source.network.NetworkTask
 
 /**
  * ローカルに保存されるデータモデル
@@ -40,3 +41,14 @@ fun LocalTask.toExternal(): Task {
     )
 }
 fun List<LocalTask>.toExternal() = map(LocalTask::toExternal)
+
+fun LocalTask.toNetwork() = NetworkTask(
+    id,
+    title,
+    description,
+    taskStatus = when(isCompleted) {
+        true -> NetworkTask.TaskStatus.COMPLETE
+        false -> NetworkTask.TaskStatus.ACTIVE
+    }
+)
+fun List<LocalTask>.toNetwork() = map(LocalTask::toNetwork)
