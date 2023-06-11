@@ -21,11 +21,14 @@ import com.example.android.architecture.blueprints.todoapp.data.source.local.toE
 import com.example.android.architecture.blueprints.todoapp.data.source.local.toNetwork
 import com.example.android.architecture.blueprints.todoapp.data.source.network.TaskNetworkDataSource
 import com.example.android.architecture.blueprints.todoapp.data.source.network.toLocal
+import com.example.android.architecture.blueprints.todoapp.di.ApplicationScope
 import com.example.android.architecture.blueprints.todoapp.di.DefaultDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.UUID
 import javax.inject.Inject
@@ -42,7 +45,8 @@ class DefaultTaskRepository @Inject constructor(
     private val localDataSource: TaskDao,
     private val networkDataSource: TaskNetworkDataSource,
     // Todo: dispatcherとInjectがまだよくわからんので確認
-    @DefaultDispatcher private val dispatcher: CoroutineDispatcher
+    @DefaultDispatcher private val dispatcher: CoroutineDispatcher,
+    @ApplicationScope private val scope: CoroutineScope
 ) {
     companion object {
         const val COMPLETED = true
@@ -87,11 +91,13 @@ class DefaultTaskRepository @Inject constructor(
     }
 
     private suspend fun savedTaskToNetwork() {
-        val localTasks = localDataSource.observeAll().first()
-        val networkTasks = withContext(dispatcher) {
-            localTasks.toNetwork()
+        scope.launch {
+            val localTasks = localDataSource.observeAll().first()
+            val networkTasks = withContext(dispatcher) {
+                localTasks.toNetwork()
+            }
+            networkDataSource.saveTasks(networkTasks)
         }
-        networkDataSource.saveTasks(networkTasks)
     }
 
 
