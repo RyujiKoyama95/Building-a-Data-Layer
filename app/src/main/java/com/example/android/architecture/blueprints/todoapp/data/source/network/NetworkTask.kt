@@ -16,6 +16,8 @@
 
 package com.example.android.architecture.blueprints.todoapp.data.source.network
 
+import com.example.android.architecture.blueprints.todoapp.data.source.local.LocalTask
+
 data class NetworkTask(
     val id: String,
     val title: String,
@@ -28,3 +30,11 @@ data class NetworkTask(
         COMPLETE
     }
 }
+
+fun NetworkTask.toLocal() = LocalTask(
+    id,
+    title,
+    shortDescription,
+    (taskStatus == NetworkTask.TaskStatus.COMPLETE)
+)
+fun List<NetworkTask>.toLocal() = map(NetworkTask::toLocal)
