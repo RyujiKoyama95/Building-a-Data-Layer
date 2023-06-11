@@ -19,6 +19,7 @@ package com.example.android.architecture.blueprints.todoapp.data
 import com.example.android.architecture.blueprints.todoapp.data.source.local.TaskDao
 import com.example.android.architecture.blueprints.todoapp.data.source.local.toExternal
 import com.example.android.architecture.blueprints.todoapp.data.source.network.TaskNetworkDataSource
+import com.example.android.architecture.blueprints.todoapp.data.source.network.toLocal
 import com.example.android.architecture.blueprints.todoapp.di.DefaultDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -69,6 +70,18 @@ class DefaultTaskRepository @Inject constructor(
     suspend fun complete(taskId: String) {
         localDataSource.updateCompleted(taskId, COMPLETED)
     }
+
+    suspend fun refresh() {
+        val networkTask = networkDataSource.loadTasks()
+        localDataSource.deleteAll()
+        // toLocal()のマッピング処理はタスク数が多数になり計算コストが高くなる可能性があるため、
+        // withContext()を利用
+        val localTask = withContext(dispatcher) {
+            networkTask.toLocal()
+        }
+        localDataSource.upsertAll(localTask)
+    }
+
 
     private fun createTaskId(): String {
         return UUID.randomUUID().toString()
