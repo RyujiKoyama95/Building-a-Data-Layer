@@ -66,11 +66,13 @@ class DefaultTaskRepository @Inject constructor(
             id = taskId
         )
         localDataSource.upsert(task.toLocal())
+        savedTaskToNetwork()
         return taskId
     }
 
     suspend fun complete(taskId: String) {
         localDataSource.updateCompleted(taskId, COMPLETED)
+        savedTaskToNetwork()
     }
 
     suspend fun refresh() {
@@ -84,7 +86,7 @@ class DefaultTaskRepository @Inject constructor(
         localDataSource.upsertAll(localTask)
     }
 
-    suspend fun savedTaskToNetwork() {
+    private suspend fun savedTaskToNetwork() {
         val localTasks = localDataSource.observeAll().first()
         val networkTasks = withContext(dispatcher) {
             localTasks.toNetwork()
