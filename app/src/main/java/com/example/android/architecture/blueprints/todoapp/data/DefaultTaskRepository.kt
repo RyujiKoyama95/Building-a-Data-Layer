@@ -52,6 +52,8 @@ class DefaultTaskRepository @Inject constructor(
 
     // TaskDao.upsert()を使うため、Task→LocalTaskへ変換
     suspend fun create(title: String, description: String): String {
+        // withContext(Dispatcher.Default)は引数に指定されたディスパッチャにコンテキストを切り替える
+        // (新たにコンテキストを生成するわけではないので、メモリを食いづらい)
         val taskId = withContext(dispatcher) {
             createTaskId()
         }
