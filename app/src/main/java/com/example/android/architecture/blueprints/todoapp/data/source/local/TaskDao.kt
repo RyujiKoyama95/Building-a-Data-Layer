@@ -30,6 +30,7 @@ interface TaskDao {
     fun observeAll(): Flow<List<LocalTask>>
 
     // Upsertはupdateとinsertの組み合わせ
+
     @Upsert
     suspend fun upsert(task: LocalTask)
 
