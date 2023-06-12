@@ -29,7 +29,7 @@ interface TaskDao {
     @Query("SELECT * FROM task")
     fun observeAll(): Flow<List<LocalTask>>
 
-    // todo: @Upsertって何
+    // Upsertはupdateとinsertの組み合わせ
     @Upsert
     suspend fun upsert(task: LocalTask)
 
