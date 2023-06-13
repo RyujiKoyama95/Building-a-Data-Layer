@@ -19,7 +19,7 @@ package com.example.android.architecture.blueprints.todoapp.data.source.local
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
-class FakeTaskDao(initialTask: List<LocalTask>): TaskDao {
-    private val _tasks = initialTask.toMutableList()
-    private val taskStream = MutableStateFlow(_tasks.toList())
-}
+//class FakeTaskDao(initialTask: List<LocalTask>): TaskDao {
+//    private val _tasks = initialTask.toMutableList()
+//    private val taskStream = MutableStateFlow(_tasks.toList())
+//}
