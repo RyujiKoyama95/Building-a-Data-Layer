@@ -51,7 +51,7 @@ class DefaultTaskRepository @Inject constructor(
     companion object {
         const val COMPLETED = true
     }
-    suspend fun observeAll(): Flow<List<Task>> {
+    fun observeAll(): Flow<List<Task>> {
         return localDataSource.observeAll().map { tasks ->
             tasks.toExternal()
         }
