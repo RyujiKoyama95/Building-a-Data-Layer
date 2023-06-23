@@ -1,4 +1,4 @@
 # Building a Data Layer
 
-- For codelab practice
+- For Codelab practice
 - Codelab by Google
